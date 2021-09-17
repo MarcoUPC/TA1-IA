@@ -25,30 +25,6 @@ def random_color():
     return list(np.random.choice(range(255),size=3))
 
     
-
-class City:
-    def __init__(self, x, y, index, name,color, distance: float = 0):
-        self.index = index
-        self.name = name
-        self.x = x
-        self.y = y
-        self.city_rect = pygame.Rect(5, 5, 10, 10)
-        self.city_rect.centerx = x
-        self.city_rect.centery = y
-        self.distance = distance
-        self.color = color
-
-    def __lt__(self, other):
-        return self.distance < other.distance
-
-    def draw_city(self):
-        pygame.draw.circle(scr, green, (self.x, self.y), 10, 3)
-        Map.draw_text(str(self.name), font_name_city, self.color, scr, self.x, self.y)
-
-    def draw_road(self, city, color):
-        pygame.draw.line(scr, color, (self.x, self.y), (city.x, city.y), 3)
-
-
 class Map:
     @staticmethod
     def calc_distance(x1, y1, x2, y2):
@@ -84,6 +60,31 @@ class Map:
         textrect = textobj.get_rect()
         textrect.topleft = (x, y)
         surface.blit(textobj, textrect)
+
+
+class City:
+    def __init__(self, x, y, index, name,color, distance: float = 0):
+        self.index = index
+        self.name = name
+        self.x = x
+        self.y = y
+        self.city_rect = pygame.Rect(5, 5, 10, 10)
+        self.city_rect.centerx = x
+        self.city_rect.centery = y
+        self.distance = distance
+        self.color = color
+
+    def __lt__(self, other):
+        return self.distance < other.distance
+
+    def draw_city(self):
+        pygame.draw.circle(scr, green, (self.x, self.y), 10, 3)
+        Map.draw_text(str(self.name), font_name_city, self.color, scr, self.x, self.y)
+
+    def draw_road(self, city, color):
+        pygame.draw.line(scr, color, (self.x, self.y), (city.x, city.y), 3)
+
+
 
 
 class Algorithms:
@@ -134,17 +135,17 @@ def gui():
         Map.draw_text('X ' + str(mouse_x) + ' Y ' + str(mouse_y), font_text, (255, 255, 255), scr, 20, 40)
 
         background_map = pygame.Rect(75, 100, 800, 550)
-        add_city_button = pygame.Rect(975, 150, 250, 100)
-        solve_map_button = pygame.Rect(975, 275, 250, 100)
-        clean_map_button = pygame.Rect(975, 400, 250, 100)
+        add_city_button = pygame.Rect(975, 300, 250, 100)
+        solve_map_button = pygame.Rect(975, 425, 250, 100)
+        clean_map_button = pygame.Rect(975, 550, 250, 100)
 
         pygame.draw.rect(scr, white, background_map)
         pygame.draw.rect(scr, gray, add_city_button)
         pygame.draw.rect(scr, red, clean_map_button)
 
         Map.draw_text('MAPA', font_text, black, scr, 95, 110)
-        Map.draw_text('Añadir Punto', font_text, black, scr, 1050, 195)
-        Map.draw_text('Limpiar', font_text, black, scr, 1064, 435)
+        Map.draw_text('Añadir Coordenada', font_text, black, scr, 1030, 345)
+        Map.draw_text('Limpiar Mapa', font_text, black, scr, 1040, 585)
 
         # PINTA LAS RUTAS DE TODOS LOS PUNTOS
         for i in range(len(points) - 1):
@@ -164,16 +165,17 @@ def gui():
 
         if len(points) > 2:
             pygame.draw.rect(scr, green, solve_map_button)
-            Map.draw_text('Obtener Ruta Optima', font_text, black, scr, 1005, 325)
+            Map.draw_text('Obtener Ruta Optima', font_text, black, scr, 1005, 465)
 
         if len(points) > 0:
-            Map.draw_text('Ultima coordenada añadida: ' + str(points[len(points) - 1].name), font_text, white, scr,
+            Map.draw_text('Ultima coordenada añadida: ' + str(points[len(points) - 1].name)+ "["+str(points[len(points)-1].distance)+"]", font_text, white, scr,
                           900, 40)
 
         if show_result:
             Map.draw_text('Total distancia de la mejor ruta: : ' + str(best_distance), font_text, white,
                           scr,
                           900, 67)
+            
 
         # ESCUCHA SI SE SELECCION EL BOTON DE AÑADIR CIUDAD
         if add_city_button.collidepoint((mouse_x, mouse_y)):

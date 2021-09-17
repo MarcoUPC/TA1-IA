@@ -14,7 +14,6 @@ def solution(matrix):
     solution = []
     for i in range(0, len(matrix)):
         random_point = points[random.randint(0, len(points) - 1)]
-        # print(random_point)
         solution.append(random_point)
         points.remove(random_point)
 
@@ -53,9 +52,7 @@ def neighbors(matrix, solution):
     return best_neighbor, best_path
 
 
-def hill_climbing(coordinate):
-    # matrix = generate_matrix(coordinate)
-
+def hill_climbing(matrix):
     current_solution = solution(matrix)
     current_path_lenght = path_length(matrix, current_solution)
     neighbor = neighbors(matrix, current_solution)[0]
