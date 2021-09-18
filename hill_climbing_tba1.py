@@ -6,69 +6,62 @@ matrix = []
 
 paths = []
 
-
-# encuentra un solucion random
-def solution(matrix):
-    points = list(range(0, len(matrix)))
-    # print(points)
-    solution = []
-    for i in range(0, len(matrix)):
-        random_point = points[random.randint(0, len(points) - 1)]
-        # print(random_point)
-        solution.append(random_point)
-        points.remove(random_point)
-
-    return solution
-
-
-# calcula la ruta basándose en la solución aleatoria
-def path_length(matrix, solution):
-    cycle_length = 0
-    for i in range(0, len(solution)):
-        cycle_length += matrix[solution[i - 1]][solution[i]]
-    # print(cycle_length)
-    return cycle_length
-
-
-# generar vecinos de la solución aleatoria intercambiando ciudades y devuelve el mejor vecino
-def neighbors(matrix, solution):
+def neighbors(matrix, sol):
     neighbors = []
-    for i in range(len(solution)):
-        for j in range(i + 1, len(solution)):
-            neighbor = solution.copy()
-            neighbor[i] = solution[j]
-            neighbor[j] = solution[i]
+    for i in range(len(sol)):
+        for j in range(i + 1, len(sol)):
+            neighbor = sol.copy()
+            neighbor[i] = sol[j]
+            neighbor[j] = sol[i]
             neighbors.append(neighbor)
 
-    # asumimos que el primer vecino de la lista es el mejor
-    best_neighbor = neighbors[0]
-    best_path = path_length(matrix, best_neighbor)
+    b_neighbor = neighbors[0]
+    b_path = path_lng(matrix, b_neighbor)
 
-    # comprobamos si existe algun vecino mejor
     for neighbor in neighbors:
-        current_path = path_length(matrix, neighbor)
-        if current_path < best_path:
-            best_path = current_path
-            best_neighbor = neighbor
-    return best_neighbor, best_path
+        c_pth = path_lng(matrix, neighbor)
+        if c_pth < b_path:
+            b_path = c_pth
+            b_neighbor = neighbor
+    return b_neighbor, b_path
 
 
 def hill_climbing(coordinate):
-    # matrix = generate_matrix(coordinate)
 
-    current_solution = solution(matrix)
-    current_path_lenght = path_length(matrix, current_solution)
-    neighbor = neighbors(matrix, current_solution)[0]
-    best_neighbor, best_neighbor_path = neighbors(matrix, neighbor)
+    c_sol = sol(matrix)
+    c_path_lng = path_lng(matrix, c_sol)
+    neighbor = neighbors(matrix, c_sol)[0]
+    b_neighbor, b_neighbor_pth = neighbors(matrix, neighbor)
 
-    while best_neighbor_path < current_path_lenght:
-        current_solution = best_neighbor
-        current_path_lenght = best_neighbor_path
-        neighbor = neighbors(matrix, current_solution)[0]
-        best_neighbor, best_neighbor_path = neighbors(matrix, neighbor)
-        paths.append(best_neighbor)
-    paths.append(current_solution)
-    return current_path_lenght, current_solution
+    while b_neighbor_pth < c_path_lng:
+        c_sol = b_neighbor
+        c_path_lng = b_neighbor_pth
+        neighbor = neighbors(matrix, c_sol)[0]
+        b_neighbor, b_neighbor_pth = neighbors(matrix, neighbor)
+        paths.append(b_neighbor)
+    paths.append(c_sol)
+    return c_path_lng, c_sol
+
+
+def sol(matrix):
+    coord = list(range(0, len(matrix)))
+    sol = []
+    for i in range(0, len(matrix)):
+        random_point = coord[random.randint(0, len(coord) - 1)]
+        sol.append(random_point)
+        coord.remove(random_point)
+
+    return sol
+
+
+def path_lng(matrix, sol):
+    c_lengh = 0
+    for i in range(0, len(sol)):
+        c_lengh += matrix[sol[i - 1]][sol[i]]
+    return c_lengh
+
+
+
 
 
 def draw_solution():
@@ -77,5 +70,3 @@ def draw_solution():
     for i in range(0, len(paths)):
         print(paths[i])
     return final_solution[0], final_solution[1], paths
-
-# draw_solution(matrix)
