@@ -110,6 +110,14 @@ class Algorithms:
                 city_actual.draw_road(city_to_go, red)
             path_points[len(path_points) - 1].draw_road(path_points[0], red)
 
+def ruta(path_result):
+    ruta = ""
+    for i in range(len(path_result)):
+        if(i == 0):
+            ruta = str(path_result[0])
+        else:
+            ruta = ruta + " => " + str(path_result[i])
+    return ruta
 
 def gui():
     points = []
@@ -168,7 +176,10 @@ def gui():
             Map.draw_text('Total distancia de la mejor ruta: : ' + str(best_distance), font_text, white,
                           scr,
                           900, 67)
-            
+        if show_result:
+            Map.draw_text('Ruta: : ' + b_pathb, font_text, white,
+                          scr,
+                          900, 88)
 
         if add_city_button.collidepoint((mouse_x, mouse_y)):
             if is_click and not add_city_action:
@@ -192,6 +203,7 @@ def gui():
         if solve_map_button.collidepoint((mouse_x, mouse_y)):
             if is_click:
                 best_distance, path_result, possible_result = Algorithms.hill_climbing(distance_matrix)
+                b_pathb = ruta(path_result)
                 show_result = True
                 add_city_action = False
                 is_click = False
