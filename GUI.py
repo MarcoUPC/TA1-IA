@@ -169,7 +169,7 @@ def gui():
             Map.draw_text('Obtener Ruta Optima', font_text, black, scr, 1005, 345)
 
         if len(points) > 0:
-            Map.draw_text('Ultima coordenada añadida: ' + str(points[len(points) - 1].name)+ "["+str(points[len(points)-1].distance)+"]", font_text, white, scr,
+            Map.draw_text('Ultima coordenada añadida: ' + str(points[len(points) - 1].name)+ "["+str(points[len(points)-1].x)+"-"+str(points[len(points)-1].y)+"]", font_text, white, scr,
                           900, 40)
 
         if show_result:
