@@ -4,7 +4,6 @@ from pygame.locals import *
 import numpy as np
 import hill_climbing_tba1 as hill_climbing
 
-# DATOS GENERALES
 
 white = (255, 255, 255)
 gray = (217, 217, 217)
@@ -124,19 +123,16 @@ def gui():
     index_result = 0
     while True:
 
-        # TITULO
         scr.fill((0, 0, 0))
         Map.draw_text('POSICIÓN DEL MOUSE', font_text, (255, 255, 255), scr, 20, 20)
 
-        # MOSTRAR POSICIÓN
         mouse_x, mouse_y = pygame.mouse.get_pos()
 
-        # DISEÑO DE LA GUI Y BOTONES
         Map.draw_text('X ' + str(mouse_x) + ' Y ' + str(mouse_y), font_text, (255, 255, 255), scr, 20, 40)
 
         background_map = pygame.Rect(75, 100, 800, 550)
-        add_city_button = pygame.Rect(975, 300, 250, 100)
-        solve_map_button = pygame.Rect(975, 425, 250, 100)
+        add_city_button = pygame.Rect(975, 425, 250, 100)
+        solve_map_button = pygame.Rect(975, 300, 250, 100)
         clean_map_button = pygame.Rect(975, 550, 250, 100)
 
         pygame.draw.rect(scr, white, background_map)
@@ -144,28 +140,25 @@ def gui():
         pygame.draw.rect(scr, red, clean_map_button)
 
         Map.draw_text('MAPA', font_text, black, scr, 95, 110)
-        Map.draw_text('Añadir Coordenada', font_text, black, scr, 1030, 345)
+        Map.draw_text('Añadir Coordenada', font_text, black, scr, 1030, 465)
         Map.draw_text('Limpiar Mapa', font_text, black, scr, 1040, 585)
 
-        # PINTA LAS RUTAS DE TODOS LOS PUNTOS
         for i in range(len(points) - 1):
             for j in range(i + 1, len(points)):
                 points[i].draw_road(points[j], gray)
 
         if show_result:
-            # SE VAN MOSTRANDO TODOS LOS RESULTADOS QUE NOS DIO EL ALGORITOM
             Algorithms.show_path(possible_result[index_result], points)
             if index_result < len(possible_result) - 1:
                 index_result = index_result + 1
             time.sleep(1)
 
-        # PINTA LAS CIUDADES
         for city in points:
             city.draw_city()
 
         if len(points) > 2:
             pygame.draw.rect(scr, green, solve_map_button)
-            Map.draw_text('Obtener Ruta Optima', font_text, black, scr, 1005, 465)
+            Map.draw_text('Obtener Ruta Optima', font_text, black, scr, 1005, 345)
 
         if len(points) > 0:
             Map.draw_text('Ultima coordenada añadida: ' + str(points[len(points) - 1].name)+ "["+str(points[len(points)-1].distance)+"]", font_text, white, scr,
@@ -177,14 +170,12 @@ def gui():
                           900, 67)
             
 
-        # ESCUCHA SI SE SELECCION EL BOTON DE AÑADIR CIUDAD
         if add_city_button.collidepoint((mouse_x, mouse_y)):
             if is_click and not add_city_action:
                 add_city_action = True
                 is_click = False
                 show_result = False
 
-        # ESCUCHA SI SE SELECCION EL MAPA PARA AÑADIR UNA CIUDAD
         if background_map.collidepoint((mouse_x, mouse_y)):
             if is_click and add_city_action:
                 city_x = mouse_x
@@ -198,7 +189,6 @@ def gui():
                 distance_matrix = Map.create_matrix(points)
                 print(distance_matrix)
 
-        # ESCUCHA SI SE SELECCION EL BOTON DE RESOLVER PARA MOSTRAR LAS RUTAS
         if solve_map_button.collidepoint((mouse_x, mouse_y)):
             if is_click:
                 best_distance, path_result, possible_result = Algorithms.hill_climbing(distance_matrix)
@@ -206,14 +196,12 @@ def gui():
                 add_city_action = False
                 is_click = False
 
-        # ESCUCHA SI SE SELECCION EL BOTON PARA LIMPIAR LA LISTA
         if clean_map_button.collidepoint((mouse_x, mouse_y)):
             if is_click:
                 show_result = False
                 points = []
                 is_click = False
 
-        # ESCUCHA LOS CLICKS O PARA SALIR DEL PROYECTO (ESC)
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
