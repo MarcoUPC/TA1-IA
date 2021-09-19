@@ -1,3 +1,6 @@
+from typing import DefaultDict
+
+
 class Edge(object):
     def __init__(self, cityB, distance):
         self.cityB = cityB
@@ -40,59 +43,31 @@ h = {'A': 7, 'B': 5, 'C': 6, 'D': 3, 'E': 5, 'F': 8, 'G': 4,
      'H': 4, 'I': 0}
 
 
-class AStar:
+
+class Graph:
+ 
     def __init__(self):
-        init = 'A'
-        finish = 'I'
-        openList = NodeList()
-        closeList = NodeList()
-        startNode = Node(init)
-        openList.append(startNode)
-        endNode = None
-
-        while True:
-            print(openList)
-            if openList == []:
-                print("No existe ninguna ruta para llegar al destino.")
-                exit(1)
-            n = min(openList, key=lambda x: x.fs)
-            openList.remove(n)
-            closeList.append(n)
-            if n.city == endNode:
-                endNode = n
-                break
-            n_gs = n.fs - n.hs
-            for city, distance in connects[cities[n.city]]:
-                cityB = city
-                m = openList.find(cityB)
-                dist = distance
-                if m:
-                    if m.fs > n_gs + m.hs + dist:
-                        m.fs = n_gs + m.hs + dist
-                        m.parent_node = n
-                else:
-                    m = closeList.find(cityB)
-                    if m:
-                        if m.fs > n_gs + m.hs + dist:
-                            m.fs = n_gs + m.hs + dist
-                            m.parent_node = n
-                            openList.append(m)
-                            closeList.remove(m)
-                    else:
-                        m = Node(cityB)
-                        m.fs = n_gs + m.hs + dist
-                        m.parent_node = n
-                        openList.append(m)
-        n = endNode
-        sol = []
-        while True:
-            city, distance = n
-            sol.append()
-            if n.parent_node == None:
-                break
-            n = n.parent_node
-        sol.reverse()
-        print(list(sol))
+ 
+        self.graph = DefaultDict(list)
+ 
+    def addNode(self,u,v):
+        self.graph[u].append(v)
+ 
 
 
-data = AStar()
+def bfs(matrix, starting_node):
+    visited = []
+    c_nodos = [starting_node]
+    
+    while c_nodos:
+        node = c_nodos.pop(0)
+        if node not in visited:
+            visited.append(node)            
+            for edge in matrix:
+                for i in edge:
+                    if(i < len(edge)):
+                        if edge[i] == node:
+                            c_nodos.append(edge[i+1])
+                        elif edge[i+1] == node:
+                            c_nodos.append(edge[i])
+    return visited

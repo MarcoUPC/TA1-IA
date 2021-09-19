@@ -61,12 +61,8 @@ def path_lng(matrix, sol):
     return c_lengh
 
 
-
-
-
 def draw_solution():
     final_solution = hill_climbing(matrix)
     print('RESULTADO RUTAS')
-    for i in range(0, len(paths)):
-        print(paths[i])
+    print(paths[len(paths)-1])
     return final_solution[0], final_solution[1], paths
